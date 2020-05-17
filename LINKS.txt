@@ -1,0 +1,3 @@
+https://bootstrap-vue.org/docs/components
+https://vue2-leaflet.netlify.app/components/LCircleMarker.html#demo
+https://leafletjs.com/examples/custom-icons/
