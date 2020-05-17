@@ -49,7 +49,8 @@ export default {
         return {
             zoom: 8,
             center: latLng(50.33319, 30.42663),
-            url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+            // url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
+            url: 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
             currentZoom: 8,
             currentCenter: latLng(50.33319, 30.42663),
             mapOptions: {zoomSnap: 0.5},
@@ -68,7 +69,7 @@ export default {
                     type: 'Circle',
                     size: 6,
                     weight: 2,
-                    color: '#ad2020',
+                    color: 'red',
                     position: [50.428911, 30.516425],
                     bounds: ''
                 },
@@ -77,7 +78,7 @@ export default {
                     type: 'Rectangle',
                     size: 6,
                     weight: 2,
-                    color: '#47e032',
+                    color: '#1a9a03',
                     position: '',
                     bounds: [[50.122779,30.58165], [50.086187,30.665163]]
                 }

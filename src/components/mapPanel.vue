@@ -54,9 +54,9 @@ export default {
                 {
                     caption: 'SOFTPRO',
                     type: 'Circle',
-                    size: 6,
+                    size: 8,
                     weight: 2,
-                    color: '#ad2020',
+                    color: 'red',
                     position: [50.428911, 30.516425],
                     bounds: ''
                 },
@@ -65,7 +65,7 @@ export default {
                     type: 'Rectangle',
                     size: 6,
                     weight: 2,
-                    color: '#47e032',
+                    color: '#1a9a03',
                     position: '',
                     bounds: [[50.122779,30.58165], [50.086187,30.665163]]
                 }
