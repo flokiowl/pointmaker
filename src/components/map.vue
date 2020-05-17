@@ -11,7 +11,14 @@
                 :radius="point.size"
                 :color="point.color"
                 v-for="(point,i) in circles" :key="point.type + i">
-                <l-popup>{{currentCenter}}</l-popup>
+                <l-popup>
+                    <div>
+                        <b>Назва:</b> <span>{{point.caption}}</span>
+                    </div>
+                    <div>
+                        <b>Координати:</b> <span>{{point.position}}</span>
+                    </div>
+                </l-popup>
             </l-circle-marker>
             <l-rectangle 
                 :bounds="point.bounds" 
@@ -25,56 +32,54 @@
                 fillColor="rgba(51,136,255,0.25)"
                 v-for="(point,i) in polygons" :key="point.type + i">
             </l-polygon>
-            <!-- <l-marker :lat-lng="point.position" :icon="this.customIcon" v-for="(point,i) in points" :key="i">
-                <l-popup>{{point.caption}}</l-popup>
-            </l-marker> -->
         </l-map>
     </div>
 </template>
 
 <script>
 import { latLng } from "leaflet"
-import { LMap, LTileLayer, LMarker, LPopup, LTooltip, LCircleMarker, LRectangle, LPolygon } from "vue2-leaflet"
+import { LMap, LTileLayer, LPopup, LCircleMarker, LRectangle, LPolygon } from "vue2-leaflet"
 import kievCoord from '../kiev.coord'
 
 export default {
     components: {
-        LMap, LTileLayer, LMarker, LPopup, LTooltip, LCircleMarker, LRectangle, LPolygon
+        LMap, LTileLayer, LPopup, LCircleMarker, LRectangle, LPolygon
     },
     data() {
         return {
             zoom: 8,
             center: latLng(50.33319, 30.42663),
             url: 'https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png',
-            marker: [
-                latLng(50.449768, 30.522084),
-            ],
             currentZoom: 8,
             currentCenter: latLng(50.33319, 30.42663),
-            mapOptions: {
-                zoomSnap: 0.5
-            },
+            mapOptions: {zoomSnap: 0.5},
             points: [
-                {
-                    caption: 'Київ',
-                    type: 'Rectangle',
-                    bounds: [[50.53198, 30.315397], [50.385975, 30.68001]],
-                    weight: 2,
-                    color: 'red'
-                },
                 {
                     caption: 'Київська область',
                     type: 'Polygon',
-                    bounds: kievCoord,
+                    size: 6,
                     weight: 2,
-                    color: '#0380e7'
+                    color: '#0380e7',
+                    position: '',
+                    bounds: kievCoord,
+                },
+                {
+                    caption: 'SOFTPRO',
+                    type: 'Circle',
+                    size: 6,
+                    weight: 2,
+                    color: '#ad2020',
+                    position: [50.428911, 30.516425],
+                    bounds: ''
                 },
                 {
                     caption: 'Обухів',
-                    type: 'Circle',
-                    position: [50.109621, 30.626304],
+                    type: 'Rectangle',
                     size: 6,
-                    color: 'orange'
+                    weight: 2,
+                    color: '#47e032',
+                    position: '',
+                    bounds: [[50.122779,30.58165], [50.086187,30.665163]]
                 }
             ]
         }
@@ -110,7 +115,6 @@ export default {
         },
         setPoints(data) {
             this.points = data
-            console.log(data)
         }
     },
     mounted() {

@@ -1,7 +1,7 @@
 <template>
     <div class="map-panel">
         <div class="map-panel__top">
-            <markerForm @submit="newPoint" />
+            <markerForm @submit="newPoint" @edit="confirmEdit"/>
         </div>
         <div class="map-panel__bottom">
             <ul class="map-panel__points-list">
@@ -45,23 +45,29 @@ export default {
                 {
                     caption: 'Київська область',
                     type: 'Polygon',
-                    bounds: kievCoord,
+                    size: 6,
                     weight: 2,
-                    color: '#0380e7'
+                    color: '#0380e7',
+                    position: '',
+                    bounds: kievCoord,
                 },
                 {
-                    caption: 'Київ',
-                    type: 'Rectangle',
-                    bounds: [[50.53198, 30.315397], [50.385975, 30.68001]],
+                    caption: 'SOFTPRO',
+                    type: 'Circle',
+                    size: 6,
                     weight: 2,
-                    color: 'red'
+                    color: '#ad2020',
+                    position: [50.428911, 30.516425],
+                    bounds: ''
                 },
                 {
                     caption: 'Обухів',
-                    type: 'Circle',
-                    position: [50.109621, 30.626304],
+                    type: 'Rectangle',
                     size: 6,
-                    color: 'orange'
+                    weight: 2,
+                    color: '#47e032',
+                    position: '',
+                    bounds: [[50.122779,30.58165], [50.086187,30.665163]]
                 }
             ],
         }
@@ -94,17 +100,61 @@ export default {
                 bounds: newBounds
             })
             this.$eventBus.$emit('setPoints', this.points)
+            this.$bvToast.toast('Точку додано', {
+                title: 'Успіх!',
+                toaster: 'b-toaster-bottom-right',
+                variant: 'success',
+                solid: true
+            })
         },
         setView(point) {
             this.$eventBus.$emit('setView', point)
         },
         saveCsv(point) {
-            let data = [[point.caption], [point.type], [point.size], [point.color], [point.position]]
+            let data
+            let boundResult
+            if (point.type === 'Circle') {
+                data = [[point.caption], [point.type], [point.size], [point.color], [point.position]]
+            } else {
+                let newBounds = []
+                point.bounds.forEach(b => {
+                    newBounds.push(b.toString().replace('[', '').replace(']', ''))
+                })
+                boundResult = newBounds.join(';')
+                data = [[point.caption], [point.type], [point.weight], [point.color], [boundResult]]
+            }
             data = data.map(el => {return el[0] + "\r\n"})
-            saveAs( new Blob( data, {type : 'data:text/csv;charset=utf-8;'}), `${point.caption}.csv`, { autoBom: true } )
+            saveAs( new Blob( data, {type : 'data:text/csv;charset=utf-8'}), `${point.caption}.csv`, { autoBom: true } )
         },
         edit(point) {
-
+            this.$eventBus.$emit('edit', point)
+        },
+        confirmEdit(point, old) {
+            console.log('point', point)
+            let target = this.points[this.points.indexOf(old)]
+            let newBounds = ''
+            if (point.bounds !== '') {
+                let bounds = point.bounds.trim().split(';')
+                newBounds = []
+                bounds.forEach(bound => {
+                    let boundArr = bound.split(',')
+                    newBounds.push([+boundArr[0],+boundArr[1]])
+                })
+            }
+            target.caption = point.caption
+            target.type = point.type
+            target.position = point.position.split(',')
+            target.size = point.size
+            target.weight = point.weight
+            target.color = point.color
+            target.bounds = newBounds
+            this.$eventBus.$emit('setPoints', this.points)
+            this.$bvToast.toast('Точку оновлено', {
+                title: 'Успіх!',
+                toaster: 'b-toaster-bottom-right',
+                variant: 'success',
+                solid: true
+            })
         },
         remove(point) {
             this.$bvModal.msgBoxConfirm('Видалити точку?', {okTitle: 'Так', cancelTitle: 'Ні', okVariant: 'danger'})
@@ -112,12 +162,19 @@ export default {
                 if (value) {
                     this.points.splice(this.points.indexOf(point), 1)
                     this.$eventBus.$emit('setPoints', this.points)
+                    this.$bvToast.toast('Точку видалено', {
+                        title: 'Успіх!',
+                        toaster: 'b-toaster-bottom-right',
+                        variant: 'success',
+                        solid: true
+                    })
                 }
             })
         }
     },
     created() {
         this.$eventBus.$emit('setPoints', this.points)
+        this.$eventBus.$emit('editPoint', this.confirmEdit)
     }
 }
 </script>
@@ -127,6 +184,7 @@ export default {
     margin: 0 -15px;
 }
 .map-panel__top {
+    height: 350px;
     .card {
         border-radius: 0;
         border: 0;
@@ -138,6 +196,8 @@ export default {
     list-style: none;
     margin: 0;
     padding: 0;
+    max-height: calc(100vh - 350px);
+    overflow: auto;
 }
 .map-panel__point {
     border-bottom: 1px solid #eee;

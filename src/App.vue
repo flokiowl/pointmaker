@@ -20,11 +20,6 @@ export default {
 	name: 'App',
 	components: {
 		Map, MapPanel
-	},
-	data() {
-		return {
-			map: null
-		}
 	}
 }
 </script>
