@@ -102,7 +102,7 @@ export default {
             this.$eventBus.$emit('setPoints', this.points)
             this.$bvToast.toast('Точку додано', {
                 title: 'Успіх!',
-                toaster: 'b-toaster-bottom-right',
+                toaster: 'b-toaster-bottom-left',
                 variant: 'success',
                 solid: true
             })
@@ -151,7 +151,7 @@ export default {
             this.$eventBus.$emit('setPoints', this.points)
             this.$bvToast.toast('Точку оновлено', {
                 title: 'Успіх!',
-                toaster: 'b-toaster-bottom-right',
+                toaster: 'b-toaster-bottom-left',
                 variant: 'success',
                 solid: true
             })
@@ -164,7 +164,7 @@ export default {
                     this.$eventBus.$emit('setPoints', this.points)
                     this.$bvToast.toast('Точку видалено', {
                         title: 'Успіх!',
-                        toaster: 'b-toaster-bottom-right',
+                        toaster: 'b-toaster-bottom-left',
                         variant: 'success',
                         solid: true
                     })
