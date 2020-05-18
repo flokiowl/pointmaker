@@ -69,7 +69,7 @@ export default {
                     type: 'Circle',
                     size: 6,
                     weight: 2,
-                    color: 'red',
+                    color: '#f40f0f',
                     position: [50.428911, 30.516425],
                     bounds: ''
                 },
