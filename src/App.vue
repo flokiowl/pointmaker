@@ -20,6 +20,9 @@ export default {
 	name: 'App',
 	components: {
 		Map, MapPanel
+	},
+	mounted() {
+		document.title = 'Pointmaker'
 	}
 }
 </script>
